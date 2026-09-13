@@ -13,28 +13,41 @@ class ContentRenderer extends StatelessWidget {
   final List<Section> sections;
   final String bookId;
 
+  /// One key per content block, in the same flattened order search results
+  /// index into (see SearchService), so the reader screen can scroll a
+  /// specific block into view after navigating from a search hit.
+  final List<GlobalKey>? blockKeys;
+
   const ContentRenderer({
     super.key,
     required this.sections,
     required this.bookId,
+    this.blockKeys,
   });
 
   @override
   Widget build(BuildContext context) {
+    final children = <Widget>[];
+    var blockIndex = 0;
+    for (final section in sections) {
+      if (section.title != null) {
+        children.add(Text(section.title!, style: AppTextStyles.contentHeading));
+        children.add(const SizedBox(height: AppSpacing.md));
+      }
+      for (final block in section.blocks) {
+        children.add(
+          KeyedSubtree(
+            key: blockKeys?[blockIndex],
+            child: _buildBlock(block),
+          ),
+        );
+        children.add(const SizedBox(height: AppSpacing.lg));
+        blockIndex++;
+      }
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        for (final section in sections) ...[
-          if (section.title != null) ...[
-            Text(section.title!, style: AppTextStyles.contentHeading),
-            const SizedBox(height: AppSpacing.md),
-          ],
-          for (final block in section.blocks) ...[
-            _buildBlock(block),
-            const SizedBox(height: AppSpacing.lg),
-          ],
-        ],
-      ],
+      children: children,
     );
   }
 
