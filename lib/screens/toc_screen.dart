@@ -5,6 +5,7 @@ import '../core/theme/app_theme.dart';
 import '../models/book.dart';
 import '../widgets/chapter_tile.dart';
 import 'chapter_screen.dart';
+import 'search_screen.dart';
 
 /// Standalone table-of-contents page — the same chapter-list design as the
 /// home screen, without the hero card.
@@ -19,8 +20,11 @@ class TocScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.search),
-          // TODO: navigate once search_screen.dart exists (milestone #7).
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => SearchScreen(book: book)),
+            );
+          },
         ),
         title: Text(book.title),
         actions: const [SizedBox(width: 48)],

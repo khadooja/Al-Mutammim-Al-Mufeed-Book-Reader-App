@@ -7,6 +7,7 @@ import '../models/book.dart';
 import '../widgets/book_card.dart';
 import '../widgets/chapter_tile.dart';
 import 'chapter_screen.dart';
+import 'search_screen.dart';
 import 'toc_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,8 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.search),
-          // TODO: navigate once search_screen.dart exists (milestone #7).
-          onPressed: () {},
+          onPressed: () async {
+            final book = await _bookFuture;
+            if (!context.mounted) return;
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => SearchScreen(book: book)),
+            );
+          },
         ),
         title: const Text('المتمم المفيد'),
         actions: const [SizedBox(width: 48)],
