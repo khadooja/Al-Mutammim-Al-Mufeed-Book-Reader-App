@@ -3,12 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bookreader_app/app.dart';
 
+import 'test_helpers.dart';
+
 void main() {
   testWidgets('Tapping the list icon navigates to the TOC screen', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const BookReaderApp());
-    await tester.pumpAndSettle();
+    await pumpAndLoadAsyncContent(tester, const BookReaderApp());
 
     await tester.tap(find.byIcon(Icons.menu));
     await tester.pumpAndSettle();
