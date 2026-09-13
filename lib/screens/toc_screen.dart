@@ -4,6 +4,7 @@ import '../core/constants.dart';
 import '../core/theme/app_theme.dart';
 import '../models/book.dart';
 import '../widgets/chapter_tile.dart';
+import 'chapter_screen.dart';
 
 /// Standalone table-of-contents page — the same chapter-list design as the
 /// home screen, without the hero card.
@@ -57,8 +58,7 @@ class TocScreen extends StatelessWidget {
               for (final chapter in book.chapters) ...[
                 ChapterTile(
                   chapter: chapter,
-                  // TODO: navigate once chapter_screen.dart exists (milestone #6).
-                  onTap: () {},
+                  onTap: () => ChapterScreen.open(context, book, chapter),
                 ),
                 const SizedBox(height: AppSpacing.sm),
               ],

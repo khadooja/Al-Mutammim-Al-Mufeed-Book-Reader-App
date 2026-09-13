@@ -6,6 +6,7 @@ import '../data/books_repository.dart';
 import '../models/book.dart';
 import '../widgets/book_card.dart';
 import '../widgets/chapter_tile.dart';
+import 'chapter_screen.dart';
 import 'toc_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -59,8 +60,13 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 BookHeroCard(
                   book: book,
-                  // TODO: navigate once chapter_screen.dart exists (milestone #6).
-                  onStartReading: () {},
+                  onStartReading: book.chapters.isEmpty
+                      ? null
+                      : () => ChapterScreen.open(
+                          context,
+                          book,
+                          book.chapters.first,
+                        ),
                 ),
                 const SizedBox(height: AppSpacing.xl + 4),
                 Row(
@@ -91,8 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       for (final chapter in book.chapters) ...[
                         ChapterTile(
                           chapter: chapter,
-                          // TODO: navigate once chapter_screen.dart exists (milestone #6).
-                          onTap: () {},
+                          onTap: () =>
+                              ChapterScreen.open(context, book, chapter),
                         ),
                         const SizedBox(height: AppSpacing.sm),
                       ],
