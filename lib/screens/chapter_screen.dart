@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../core/constants.dart';
 import '../core/theme/app_theme.dart';
@@ -50,6 +51,11 @@ class ChapterScreen extends StatefulWidget {
 class _ChapterScreenState extends State<ChapterScreen> {
   late final List<GlobalKey> _blockKeys;
 
+  /// Tracked via SelectionArea.onSelectionChanged — there's no public way
+  /// to read the current selection from the contextMenuBuilder's
+  /// SelectableRegionState, so the Share button reads this instead.
+  String? _selectedText;
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +90,29 @@ class _ChapterScreenState extends State<ChapterScreen> {
         child: widget.chapter.sections.isEmpty
             ? const _EmptyChapterState()
             : SelectionArea(
+                onSelectionChanged: (content) =>
+                    _selectedText = content?.plainText,
+                // Adds "مشاركة" (Share) to the system Copy/Select-all menu
+                // that SelectionArea already provides for free.
+                contextMenuBuilder: (context, selectableRegionState) {
+                  final buttonItems = <ContextMenuButtonItem>[
+                    ...selectableRegionState.contextMenuButtonItems,
+                    ContextMenuButtonItem(
+                      label: 'مشاركة',
+                      onPressed: () {
+                        final text = _selectedText;
+                        selectableRegionState.hideToolbar();
+                        if (text != null && text.isNotEmpty) {
+                          SharePlus.instance.share(ShareParams(text: text));
+                        }
+                      },
+                    ),
+                  ];
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                    anchors: selectableRegionState.contextMenuAnchors,
+                    buttonItems: buttonItems,
+                  );
+                },
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.all(AppSpacing.lg),
                   child: ContentRenderer(
