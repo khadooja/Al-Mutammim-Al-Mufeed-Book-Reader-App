@@ -24,9 +24,19 @@ class BooksRepository {
   String _assetPathFor(String bookId) =>
       '${AppConstants.booksAssetsBasePath}/$bookId/book.json';
 
-  /// Loads and parses the book with [bookId] (defaults to the app's single
-  /// bundled book).
-  Future<Book> loadBook([String bookId = AppConstants.defaultBookId]) async {
+  /// Loads every bundled book, in [AppConstants.libraryBookIds] order — the
+  /// library screen shows a card per book, and hands the loaded [Book] on to
+  /// the TOC/reader/search screens so they don't re-read it.
+  Future<List<Book>> loadLibrary() async {
+    final books = <Book>[];
+    for (final bookId in AppConstants.libraryBookIds) {
+      books.add(await loadBook(bookId));
+    }
+    return books;
+  }
+
+  /// Loads and parses the book with [bookId].
+  Future<Book> loadBook(String bookId) async {
     final path = _assetPathFor(bookId);
 
     final String raw;
