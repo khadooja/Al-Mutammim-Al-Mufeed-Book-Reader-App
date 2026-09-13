@@ -6,6 +6,7 @@ import '../data/books_repository.dart';
 import '../models/book.dart';
 import '../widgets/book_card.dart';
 import '../widgets/chapter_tile.dart';
+import 'toc_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,8 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.menu, color: AppColors.gold),
-                      // TODO: navigate once toc_screen.dart exists (milestone #5).
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => TocScreen(book: book),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
