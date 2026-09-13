@@ -63,6 +63,7 @@ flutter:
   assets:
     - lib/assets_data/books/al_mutammim_al_mufeed/book.json
     - lib/assets_data/books/al_mutammim_al_mufeed/images/
+    - lib/assets_data/books/al_madkhal_ila_ilm_al_tajweed/book.json
 
   fonts:
     - family: Amiri

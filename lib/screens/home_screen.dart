@@ -5,11 +5,10 @@ import '../core/theme/app_theme.dart';
 import '../data/books_repository.dart';
 import '../models/book.dart';
 import '../widgets/book_card.dart';
-import '../widgets/chapter_tile.dart';
-import 'chapter_screen.dart';
-import 'search_screen.dart';
 import 'toc_screen.dart';
 
+/// The library: one card per bundled book. Tapping a book opens its own
+/// table of contents, and the reader/search flow continues from there.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -19,33 +18,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final BooksRepository _repository = const BooksRepository();
-  late final Future<Book> _bookFuture;
+  late final Future<List<Book>> _libraryFuture;
 
   @override
   void initState() {
     super.initState();
-    _bookFuture = _repository.loadBook();
+    _libraryFuture = _repository.loadLibrary();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () async {
-            final book = await _bookFuture;
-            if (!context.mounted) return;
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => SearchScreen(book: book)),
-            );
-          },
-        ),
-        title: const Text('المتمم المفيد'),
-        actions: const [SizedBox(width: 48)],
-      ),
-      body: FutureBuilder<Book>(
-        future: _bookFuture,
+      appBar: AppBar(title: const Text('المكتبة')),
+      body: FutureBuilder<List<Book>>(
+        future: _libraryFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
             return const Center(child: CircularProgressIndicator());
@@ -54,7 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
             return _ErrorState(error: snapshot.error!);
           }
 
-          final book = snapshot.data!;
+          final books = snapshot.data!;
+          if (books.isEmpty) {
+            return const _EmptyLibraryState();
+          }
+
           return SafeArea(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(
@@ -64,52 +54,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 AppSpacing.xxl,
               ),
               children: [
-                BookHeroCard(
-                  book: book,
-                  onStartReading: book.chapters.isEmpty
-                      ? null
-                      : () => ChapterScreen.open(
-                          context,
-                          book,
-                          book.chapters.first,
-                        ),
-                ),
-                const SizedBox(height: AppSpacing.xl + 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'محتويات الكتاب',
-                      style: AppTextStyles.sectionHeading,
+                for (final book in books) ...[
+                  BookHeroCard(
+                    book: book,
+                    onStartReading: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => TocScreen(book: book)),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.menu, color: AppColors.gold),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => TocScreen(book: book),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                if (book.chapters.isEmpty)
-                  const _EmptyChaptersState()
-                else
-                  Column(
-                    children: [
-                      for (final chapter in book.chapters) ...[
-                        ChapterTile(
-                          chapter: chapter,
-                          onTap: () =>
-                              ChapterScreen.open(context, book, chapter),
-                        ),
-                        const SizedBox(height: AppSpacing.sm),
-                      ],
-                    ],
                   ),
+                  const SizedBox(height: AppSpacing.lg),
+                ],
               ],
             ),
           );
@@ -128,7 +81,7 @@ class _ErrorState extends StatelessWidget {
   Widget build(BuildContext context) {
     final message = error is BookLoadException
         ? (error as BookLoadException).message
-        : 'حدث خطأ غير متوقع أثناء تحميل الكتاب.';
+        : 'حدث خطأ غير متوقع أثناء تحميل الكتب.';
 
     return Center(
       child: Padding(
@@ -143,7 +96,7 @@ class _ErrorState extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'تعذّر تحميل الكتاب',
+              'تعذّر تحميل الكتب',
               textAlign: TextAlign.center,
               style: AppTextStyles.sectionHeading,
             ),
@@ -160,17 +113,19 @@ class _ErrorState extends StatelessWidget {
   }
 }
 
-class _EmptyChaptersState extends StatelessWidget {
-  const _EmptyChaptersState();
+class _EmptyLibraryState extends StatelessWidget {
+  const _EmptyLibraryState();
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.xl),
-      child: Text(
-        'لا توجد فصول متاحة حتى الآن.',
-        textAlign: TextAlign.center,
-        style: AppTextStyles.caption,
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xl),
+        child: Text(
+          'لا توجد كتب متاحة حتى الآن.',
+          textAlign: TextAlign.center,
+          style: AppTextStyles.caption,
+        ),
       ),
     );
   }

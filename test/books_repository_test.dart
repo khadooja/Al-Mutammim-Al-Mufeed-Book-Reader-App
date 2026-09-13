@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:bookreader_app/core/constants.dart';
 import 'package:bookreader_app/data/books_repository.dart';
 
 void main() {
@@ -7,8 +8,8 @@ void main() {
   group('BooksRepository', () {
     const repository = BooksRepository();
 
-    test('loads and parses the bundled default book', () async {
-      final book = await repository.loadBook();
+    test('loads and parses a bundled book by id', () async {
+      final book = await repository.loadBook('al_mutammim_al_mufeed');
 
       expect(book.id, 'al_mutammim_al_mufeed');
       expect(book.title, 'المتمم المفيد');
@@ -21,6 +22,19 @@ void main() {
         () => repository.loadBook('does_not_exist'),
         throwsA(isA<BookLoadException>()),
       );
+    });
+
+    test('loadLibrary loads every configured book, in order', () async {
+      final books = await repository.loadLibrary();
+
+      expect(books, hasLength(AppConstants.libraryBookIds.length));
+      expect(
+        books.map((b) => b.id).toList(),
+        AppConstants.libraryBookIds,
+      );
+      for (final book in books) {
+        expect(book.chapters, isNotEmpty);
+      }
     });
   });
 }

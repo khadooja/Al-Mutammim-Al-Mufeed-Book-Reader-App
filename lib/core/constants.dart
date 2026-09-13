@@ -5,9 +5,15 @@ class AppConstants {
   AppConstants._();
 
   static const String booksAssetsBasePath = 'lib/assets_data/books';
-  static const String defaultBookId = 'al_mutammim_al_mufeed';
-  static const String defaultBookJsonPath =
-      '$booksAssetsBasePath/$defaultBookId/book.json';
+
+  /// The books bundled with the app, in the order they're meant to be read
+  /// (المدخل is the prerequisite, المتمم its sequel) — which is also the
+  /// order the library screen lists them in. Adding a book means adding its
+  /// id here plus its assets in pubspec.yaml.
+  static const List<String> libraryBookIds = [
+    'al_madkhal_ila_ilm_al_tajweed',
+    'al_mutammim_al_mufeed',
+  ];
 }
 
 class AppSpacing {

@@ -5,8 +5,9 @@ import '../core/theme/app_theme.dart';
 import '../core/theme/chapter_icons.dart';
 import '../models/book.dart';
 
-/// The home screen's hero card: cover icon, title/subtitle/author,
-/// description, and the "start reading" call to action.
+/// A book's card on the library screen: cover icon, title/subtitle/author,
+/// description, and the "start reading" call to action. Tapping anywhere on
+/// the card does the same thing as the button.
 class BookHeroCard extends StatelessWidget {
   final Book book;
   final VoidCallback? onStartReading;
@@ -15,6 +16,14 @@ class BookHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onStartReading,
+      borderRadius: BorderRadius.circular(AppRadii.hero),
+      child: _buildCard(),
+    );
+  }
+
+  Widget _buildCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(
