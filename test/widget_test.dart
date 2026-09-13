@@ -4,13 +4,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bookreader_app/app.dart';
 
 void main() {
-  testWidgets('App builds and shows the app bar title', (
+  testWidgets('Home screen loads the bundled book and shows its chapters', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const BookReaderApp());
     await tester.pumpAndSettle();
 
-    expect(find.text('المتمم المفيد'), findsOneWidget);
+    expect(find.text('المتمم المفيد'), findsWidgets);
+    expect(find.text('ابدأ القراءة'), findsOneWidget);
+    expect(find.text('محتويات الكتاب'), findsOneWidget);
+    expect(
+      find.textContaining('مقدمة الكتاب', findRichText: true),
+      findsOneWidget,
+    );
     expect(find.byType(Directionality), findsWidgets);
   });
 }

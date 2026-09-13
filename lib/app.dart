@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/theme/app_theme.dart';
+import 'screens/home_screen.dart';
 
 class BookReaderApp extends StatelessWidget {
   const BookReaderApp({super.key});
@@ -25,25 +26,7 @@ class BookReaderApp extends StatelessWidget {
           child: child ?? const SizedBox.shrink(),
         );
       },
-      home: const _PlaceholderHome(),
-    );
-  }
-}
-
-/// Temporary placeholder — replaced by the real home screen in milestone #4.
-class _PlaceholderHome extends StatelessWidget {
-  const _PlaceholderHome();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('المتمم المفيد')),
-      body: const Center(
-        child: Text(
-          'إعداد المشروع والسمة مكتمل',
-          style: AppTextStyles.heroHeading,
-        ),
-      ),
+      home: const HomeScreen(),
     );
   }
 }
