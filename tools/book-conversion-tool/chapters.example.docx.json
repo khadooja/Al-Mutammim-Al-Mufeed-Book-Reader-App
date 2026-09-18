@@ -1,0 +1,21 @@
+{
+  "_comment": "Example config for --input a .docx (or .doc, converted automatically) file. Chapters are found by matching the exact heading text, not page numbers.",
+
+  "book": {
+    "id": "al_mutammim_al_mufeed",
+    "title": "المتمم المفيد",
+    "subtitle": "للمدخل إلى علم التجويد",
+    "author": "أبو علي خالد بن علي بابكر",
+    "description": "كتاب تعليمي في علم التجويد..."
+  },
+
+  "chapters": [
+    { "title": "مقدمة الكتاب", "start_marker": "مقدمة", "icon": "book" },
+    { "title": "مبادئ علم التجويد", "start_marker": "مبادئ علم التجويد", "icon": "graduation_cap" },
+    { "title": "مخارج الحروف", "start_marker": "مخارج الحروف", "icon": "mouth" }
+  ],
+
+  "sub_headings": {
+    "آداب قارئ القرآن ومعلمه": "آداب قارئ القرآن ومعلمه"
+  }
+}

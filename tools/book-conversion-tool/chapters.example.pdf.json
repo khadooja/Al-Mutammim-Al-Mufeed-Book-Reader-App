@@ -1,0 +1,26 @@
+{
+  "_comment": "Example config for --input a .pdf file. Page numbers are PDF page numbers (as pdftoppm/pdfimages count them), not the printed page numbers inside the book — open the file once, find the offset between the two, and add it to the printed TOC numbers.",
+
+  "book": {
+    "id": "al_mutammim_al_mufeed",
+    "title": "المتمم المفيد",
+    "subtitle": "للمدخل إلى علم التجويد",
+    "author": "أبو علي خالد بن علي بابكر",
+    "description": "كتاب تعليمي في علم التجويد..."
+  },
+
+  "chapters": [
+    { "title": "مقدمة الكتاب", "start_page": 2, "end_page": 7, "icon": "book" },
+    { "title": "مبادئ علم التجويد", "start_page": 8, "end_page": 12, "icon": "graduation_cap" },
+    { "title": "فضائل قراءة القرآن الكريم وآداب قارئه ومعلمه", "start_page": 13, "end_page": 31, "icon": "open_book" },
+    { "title": "مخارج الحروف", "start_page": 32, "end_page": 75, "icon": "mouth" }
+  ],
+
+  "sub_headings": {
+    "23": "آداب قارئ القرآن ومعلمه",
+    "43": "المخرج الرئيسي الأول: الجوف",
+    "45": "المخرج الرئيسي الثاني: الحلق"
+  },
+
+  "decorative_pages": [1, 3, 153]
+}
