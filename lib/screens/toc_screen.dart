@@ -18,16 +18,20 @@ class TocScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => SearchScreen(book: book)),
-            );
-          },
-        ),
+        // No explicit `leading` here — this screen is pushed on top of the
+        // library, so leaving it unset lets AppBar auto-populate the system
+        // back button instead of the search icon silently swallowing it.
         title: Text(book.title),
-        actions: const [SizedBox(width: 48)],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => SearchScreen(book: book)),
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: ListView(
